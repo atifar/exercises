@@ -48,8 +48,28 @@ def add_entry():
             print("saved successfully.")
 
 
-def view_entries():
+def view_entries(serach_query=None):
     """View previous entries"""
+    entries = Entry.select().order_by(Entry.timestamp.desc())
+    if serach_query:
+        entries = entries.where(Entry.content.contains(serach_query))
+
+    for entry in entries:
+        timestamp = entry.timestamp.strftime('%A %B %d, %Y %I:%M%p')
+        print(timestamp)
+        print('='*len(timestamp))
+        print(entry.content)
+        print('n) next entry')
+        print('q) return to main menu')
+
+        next_action = input('Action: [Nq] ').lower().strip()
+        if next_action == 'q':
+            break
+
+
+def search_entries():
+    """Serach entries containing a string"""
+    view_entries(input('Search query: '))
 
 
 def delete_entry(entry):
@@ -58,6 +78,7 @@ def delete_entry(entry):
 menu = OrderedDict([
     ('a', add_entry),
     ('v', view_entries),
+    ('s', search_entries),
 ])
 
 
