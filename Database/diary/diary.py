@@ -45,7 +45,7 @@ def add_entry():
     if data:
         if input("Save entry? [Yn] ").lower() != 'n':
             Entry.create(content=data)
-            print("saved successfully.")
+            print("Entry saved successfully.")
 
 
 def view_entries(serach_query=None):
@@ -60,20 +60,26 @@ def view_entries(serach_query=None):
         print('='*len(timestamp))
         print(entry.content)
         print('n) next entry')
+        print('d) delete entry')
         print('q) return to main menu')
 
-        next_action = input('Action: [Nq] ').lower().strip()
+        next_action = input('Action: [Ndq] ').lower().strip()
         if next_action == 'q':
             break
+        elif next_action == 'd':
+            delete_entry(entry)
 
 
 def search_entries():
-    """Serach entries containing a string"""
+    """Search entries containing a string"""
     view_entries(input('Search query: '))
 
 
 def delete_entry(entry):
     """Delete an entry"""
+    if input("Are you sure about deleting this entry? [yN] ").lower() == 'y':
+        entry.delete_instance()
+        print("Entry deleted!")
 
 menu = OrderedDict([
     ('a', add_entry),
